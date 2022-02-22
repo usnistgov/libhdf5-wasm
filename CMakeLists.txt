@@ -13,7 +13,7 @@ FetchContent_Declare(
 FetchContent_Populate(hdf5)
 
 # set the project name
-project(hdf5-wasm)
+project(libhdf5-wasm-build)
 
 option(BUILD_SHARED_LIBS "Build shared libs" OFF)
 option(HDF5_BUILD_EXAMPLES "Build Examples" OFF)
@@ -23,18 +23,8 @@ option(BUILD_TESTING "Build Tests" OFF)
 option(HDF5_BUILD_CPP_LIB "Build CPP libraries" ON)
 option(HDF5_ENABLE_Z_LIB_SUPPORT "Enable ZLIB" ON)
 
-set(LIBHDF5_PATH ${CMAKE_CURRENT_SOURCE_DIR}/libhdf5)
-set(CMAKE_INSTALL_PREFIX ${LIBHDF5_PATH})
+set(CMAKE_INSTALL_PREFIX hdf5)
 set(H5_HAVE_GETPWUID OFF)
 set(H5_HAVE_SIGNAL OFF)
 
 add_subdirectory(${hdf5_SOURCE_DIR})
-
-add_library(hdf5-wasm INTERFACE)
-target_include_directories(hdf5-wasm INTERFACE include)
-target_link_options(hdf5-wasm INTERFACE ${LIBHDF5_PATH}/lib/libhdf5.a ${LIBHDF5_PATH}/lib/libhdf5_hl.a)
-
-add_library(hdf5-wasm-cpp INTERFACE)
-target_include_directories(hdf5-wasm-cpp INTERFACE include)
-target_link_libraries(hdf5-wasm-cpp INTERFACE hdf5-wasm)
-target_link_options(hdf5-wasm-cpp INTERFACE ${LIBHDF5_PATH}/lib/libhdf5_cpp.a ${LIBHDF5_PATH}/lib/libhdf5_hl_cpp.a)
