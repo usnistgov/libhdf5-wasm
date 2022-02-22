@@ -1,3 +1,3 @@
 .DS_Store
-libhdf5-wasm.tar
+libhdf5-wasm.tar*
 wasm_build/**
