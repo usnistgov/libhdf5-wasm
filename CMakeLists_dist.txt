@@ -1,0 +1,13 @@
+project(libhdf5-wasm
+    VERSION 0.1.0
+    DESCRIPTION "HDF5 C/C++ libaries for WebAssembly"
+    LANGUAGES C CXX)
+
+add_library(hdf5-wasm INTERFACE)
+target_include_directories(hdf5-wasm INTERFACE include)
+target_link_options(hdf5-wasm INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lib/libhdf5.a ${CMAKE_CURRENT_SOURCE_DIR}/lib/libhdf5_hl.a)
+
+add_library(hdf5-wasm-cpp INTERFACE)
+target_include_directories(hdf5-wasm-cpp INTERFACE include)
+target_link_libraries(hdf5-wasm-cpp INTERFACE hdf5-wasm)
+target_link_options(hdf5-wasm-cpp INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lib/libhdf5_cpp.a ${CMAKE_CURRENT_SOURCE_DIR}/lib/libhdf5_hl_cpp.a)
