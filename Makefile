@@ -9,6 +9,9 @@ $(WASM_LIBS):
 	cd $(WASM_BUILD_DIR) && emcmake cmake ../;
 	cd $(WASM_BUILD_DIR) && emmake make -j8 install;
 
+release: $(WASM_LIBS)
+	tar -cvf libhdf5-wasm.tar libhdf5/ CMakeLists.txt
+
 clean:
 	rm -rf $(WASM_BUILD_DIR);
 	rm -rf $(INSTALL_DIR);
