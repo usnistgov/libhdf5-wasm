@@ -2,13 +2,14 @@ cmake_minimum_required(VERSION 3.10)
 include(FetchContent)
 
 # pre-cache the linker flags
-set(CMAKE_EXE_LINKER_FLAGS_INIT "-sNODERAWFS=1 -sUSE_ZLIB=1" CACHE INTERNAL "")
+set(CMAKE_EXE_LINKER_FLAGS_INIT "-sNODERAWFS=1 -sUSE_ZLIB=1 -sFORCE_FILESYSTEM=1" CACHE INTERNAL "")
 
 FetchContent_Declare(
   hdf5
   URL https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_12_1.tar.gz
   URL_HASH SHA256=e6dde173c2d243551922d23a0387a79961205b018502e6a742acb30b61bc2d5f
-#   SOURCE_DIR libhdf5
+  # URL https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-1_13_0.tar.gz
+  # URL_HASH SHA256=71ea4747e7362e27e925b67d1dea868bebedd599903f371ccd73949b6a805493
 )
 FetchContent_Populate(hdf5)
 
