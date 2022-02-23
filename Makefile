@@ -1,18 +1,25 @@
 WASM_BUILD_DIR = wasm_build
-INSTALL_DIR = $(WASM_BUILD_DIR)/hdf5
-WASM_LIB_DIR = $(INSTALL_DIR)/lib
-WASM_LIBS = $(WASM_LIB_DIR)/libhdf5.a $(WASM_LIB_DIR)/libhdf5_hl.a 
+HDF5_VERSIONS = 1_12_1 1_13_0 1_10_8
+INSTALL_PATHS = $(patsubst %, $(WASM_BUILD_DIR)/%/hdf5, $(HDF5_VERSIONS))
+TARBALLS = $(patsubst %, libhdf5-%-wasm.tar.gz, $(HDF5_VERSIONS))
 
-$(WASM_LIBS):
-	mkdir -p $(WASM_BUILD_DIR);
-	cd $(WASM_BUILD_DIR) && emcmake cmake ../;
-	cd $(WASM_BUILD_DIR) && emmake make -j8 install;
+all: $(INSTALL_PATHS)
+release: $(TARBALLS)
 
-release: $(WASM_LIBS)
-	cp CMakeLists_dist.txt $(INSTALL_DIR)/CMakeLists.txt;
-	cd $(INSTALL_DIR) && tar -czvf ../../libhdf5-wasm.tar.gz *;
-	shasum -a 256 libhdf5-wasm.tar.gz;
+$(WASM_BUILD_DIR)/%/hdf5: VERSION=$(*)
+$(WASM_BUILD_DIR)/%/hdf5:
+	mkdir -p $(WASM_BUILD_DIR)/$(VERSION);
+	cd $(WASM_BUILD_DIR)/$(VERSION) && emcmake cmake ../../ -DHDF5_VERSION=$(VERSION);
+	cd $(WASM_BUILD_DIR)/$(VERSION) && emmake make -j8 install;
+
+libhdf5-%-wasm.tar.gz: VERSION=$(*)
+libhdf5-%-wasm.tar.gz: $(WASM_BUILD_DIR)/%/hdf5
+	cp CMakeLists_dist.txt $(WASM_BUILD_DIR)/$(VERSION)/hdf5/;
+	cd $(WASM_BUILD_DIR)/$(VERSION)/hdf5 && tar -czvf ../../../$@ *;
+
+shasum: $(TARBALLS)
+	@for t in $(TARBALLS); do shasum -a 256 $$t; done;
 
 clean:
 	rm -rf $(WASM_BUILD_DIR);
-	rm -rf $(INSTALL_DIR);
+	rm $(TARBALLS);
