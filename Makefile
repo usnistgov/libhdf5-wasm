@@ -11,6 +11,7 @@ $(WASM_LIBS):
 release: $(WASM_LIBS)
 	cp CMakeLists_dist.txt $(INSTALL_DIR)/CMakeLists.txt;
 	cd $(INSTALL_DIR) && tar -czvf ../../libhdf5-wasm.tar.gz *;
+	shasum -a 256 libhdf5-wasm.tar.gz;
 
 clean:
 	rm -rf $(WASM_BUILD_DIR);
