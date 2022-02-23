@@ -1,14 +1,35 @@
 # libhdf5-wasm
-Build artifacts for libhdf5 (wasm) using Emscripten
 
-in libhdf5-wasm.tar file attached to releases, you can find the `include` folder as well as
+## Building
+### Prerequisites
+ * Emscripten
+ * CMake >= 3.10
+ * make
+
+### Build
+* clone this repository
+* activate emscripten (`emcc` and `emcmake`)
+* alter `CMakeLists.txt` with whatever flags and options you want
+* run `make all` to build all supported versions of hdf5, currently:
+  * 1.10.8
+  * 1.12.1
+  * 1.13.0
+* run `make release` to create gzipped tarballs of all versions e.g. libhdf5-1_12_1-wasm.tar.gz
+# Using prebuilt artifacts
+Prebuilt WASM libraries are attached to the releases of this repository.  In e.g. libhdf5-1_12_1-wasm.tar.gz you will find (among other things): 
+ * `share/COPYING` license for HDF5
+ * the `include` folder for building against these libraries
  * `lib/libhdf5.a`
  * `lib/libhdf5_hl.a`
  * `lib/libhdf5_cpp.a`
  * `lib/libhdf5_hl_cpp.a`
+ * `CMakeLists.txt` (enables FetchContent, see below)
  
-To pull in automatically for use with CMake, see e.g.
+## Using CMake FetchContent
+To pull in automatically for use with CMake, see example below (libraries provided are `hdf5-wasm` and `hdf5-wasm-cpp`).  This functionality is provided based on contributions from @LTLA
+
 ```cmake
+# CMakeLists.txt:
 cmake_minimum_required(VERSION 3.10)
 include(FetchContent)
 
@@ -20,16 +41,22 @@ project(libhdf5-test
 
 FetchContent_Declare(
   libhdf5-wasm
-  URL https://github.com/usnistgov/libhdf5-wasm/releases/download/v0.1.0/libhdf5-wasm.tar.gz
-  URL_HASH SHA256=eef01adccf6934fd1ad58dc35fa2439f1ae2061ba90b10987c638e3c9366167e
+  URL https://github.com/usnistgov/libhdf5-wasm/releases/download/v0.1.0/libhdf5-1_12_1-wasm.tar.gz
+  URL_HASH SHA256=6980e89947a2111bad5c4b2d643cfad02c94c9f85c967b8094b27abf87f9d441
 )
 FetchContent_MakeAvailable(libhdf5-wasm)
 
-add_executable(test test.cpp)
+# build a project using only C headers (libhdf5.a, libhdf5_hl.a):
+# add_executable(test test.cpp)
+# target_link_libraries(test hdf5-wasm)
 
-target_link_libraries(test hdf5-wasm-cpp)
+# build a project using C++ headers 
+# (C headers + libhdf5_cpp.a, libhdf5_hl_cpp.a):
+add_executable(test_cpp test_cpp.cpp)
+target_link_libraries(test_cpp hdf5-wasm-cpp)
 
-set_target_properties(test PROPERTIES
+# Optional flags to set when building your project
+set_target_properties(test_cpp PROPERTIES
     LINK_FLAGS "--bind -s ALLOW_MEMORY_GROWTH=1 -s USE_ZLIB=1 -s FORCE_FILESYSTEM=1 -s 'EXPORTED_RUNTIME_METHODS=[\"FS\"]'"
 )
 ```
