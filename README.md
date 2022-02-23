@@ -42,7 +42,7 @@ project(libhdf5-test
 FetchContent_Declare(
   libhdf5-wasm
   URL https://github.com/usnistgov/libhdf5-wasm/releases/download/v0.1.0/libhdf5-1_12_1-wasm.tar.gz
-  URL_HASH SHA256=6980e89947a2111bad5c4b2d643cfad02c94c9f85c967b8094b27abf87f9d441
+  URL_HASH SHA256=ea3b35122465e1d0b526788b47a3be9c90e27e19ab35e62788886a755088e253
 )
 FetchContent_MakeAvailable(libhdf5-wasm)
 
