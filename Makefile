@@ -14,7 +14,7 @@ $(WASM_BUILD_DIR)/%/hdf5:
 
 libhdf5-%-wasm.tar.gz: VERSION=$(*)
 libhdf5-%-wasm.tar.gz: $(WASM_BUILD_DIR)/%/hdf5
-	cp CMakeLists_dist.txt $(WASM_BUILD_DIR)/$(VERSION)/hdf5/;
+	cp CMakeLists_dist.txt $(WASM_BUILD_DIR)/$(VERSION)/hdf5/CMakeLists.txt;
 	cd $(WASM_BUILD_DIR)/$(VERSION)/hdf5 && tar -czvf ../../../$@ *;
 
 shasum: $(TARBALLS)
