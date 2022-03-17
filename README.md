@@ -26,7 +26,7 @@ Prebuilt WASM libraries are attached to the releases of this repository.  In e.g
  * `CMakeLists.txt` (enables FetchContent, see below)
  
 ## Using CMake FetchContent
-To pull in automatically for use with CMake, see example below (libraries provided are `hdf5-wasm` and `hdf5-wasm-cpp`).  This functionality is provided based on contributions from @LTLA
+To pull in automatically for use with CMake, see example below (libraries provided are `hdf5-wasm` and `hdf5-wasm-cpp`).  This functionality is provided based on contributions from [@LTLA](https://github.com/LTLA) (thanks!)
 
 ```cmake
 # CMakeLists.txt:
