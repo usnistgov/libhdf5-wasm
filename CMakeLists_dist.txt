@@ -1,5 +1,5 @@
 project(libhdf5-wasm
-    VERSION 0.1.0
+    VERSION 0.1.1
     DESCRIPTION "HDF5 C/C++ libaries for WebAssembly"
     LANGUAGES C CXX)
 
