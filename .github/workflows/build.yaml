@@ -1,4 +1,7 @@
-on: [push]
+on:
+  push:
+    tags:
+      - 'v*'
 
 name: Build HDF5 Wasm
 
@@ -11,17 +14,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Fetch release name
+        run: |
+          release=${GITHUB_REF#refs/*/}
+          echo "RELEASE=${release}" >> $GITHUB_ENV
+          emsdk=$(echo ${release} | sed "s/^v[^_]*_//" | sed "s/_.*//")
+          echo "EMSDK_VERSION=${emsdk}" >> $GITHUB_ENV
+
       - name: Activate Emscripten version
-        run: ./activate.sh
+        run: |
+          cd /emsdk && git pull
+          emsdk install ${{ env.EMSDK_VERSION }}
+          emsdk activate ${{ env.EMSDK_VERSION }}
 
       - name: Build library
         run: make all
 
       - name: Package builds
         run: make release
-
-      - name: Fetch release name
-        run: echo "RELEASE=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Prettify release body
         run: |
@@ -40,7 +50,6 @@ jobs:
 
       - name: Publish tarballs
         uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: libhdf5-*-wasm.tar.gz
           name: ${{ env.RELEASE }}
