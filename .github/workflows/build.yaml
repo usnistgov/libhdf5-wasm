@@ -18,8 +18,12 @@ jobs:
         run: |
           release=${GITHUB_REF#refs/*/}
           echo "RELEASE=${release}" >> $GITHUB_ENV
-          emsdk=$(echo ${release} | sed "s/^v[^_]*_//" | sed "s/_.*//")
+          emsdk=$(echo ${release} | sed "s/^v[^_]*_//") 
           echo "EMSDK_VERSION=${emsdk}" >> $GITHUB_ENV
+          prefix=$(echo ${release} | sed "s/_.*//") 
+          title="${prefix} (Emscripten ${emsdk})"
+          echo "TITLE=${title}" >> $GITHUB_ENV
+          echo $title
 
       - name: Activate Emscripten version
         run: |
@@ -52,5 +56,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: libhdf5-*-wasm.tar.gz
-          name: ${{ env.RELEASE }}
+          name: ${{ env.TITLE }}
           body_path: release.txt 
