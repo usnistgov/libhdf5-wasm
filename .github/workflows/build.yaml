@@ -1,0 +1,60 @@
+on:
+  push:
+    tags:
+      - 'v*'
+
+name: Build HDF5 Wasm
+
+jobs:
+  build-wasm:
+    runs-on: ubuntu-latest
+    container: ghcr.io/ltla/emcmake-docker/builder:2022-12-13
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Fetch release name
+        run: |
+          release=${GITHUB_REF#refs/*/}
+          echo "RELEASE=${release}" >> $GITHUB_ENV
+          emsdk=$(echo ${release} | sed "s/^v[^_]*_//") 
+          echo "EMSDK_VERSION=${emsdk}" >> $GITHUB_ENV
+          prefix=$(echo ${release} | sed "s/_.*//") 
+          title="${prefix} (Emscripten ${emsdk})"
+          echo "TITLE=${title}" >> $GITHUB_ENV
+          echo $title
+
+      - name: Activate Emscripten version
+        run: |
+          cd /emsdk && git pull
+          emsdk install ${{ env.EMSDK_VERSION }}
+          emsdk activate ${{ env.EMSDK_VERSION }}
+
+      - name: Build library
+        run: make all
+
+      - name: Package builds
+        run: make release
+
+      - name: Prettify release body
+        run: |
+          echo "Built with:" > release.txt
+          echo "- "$(cmake --version | head -1) >> release.txt
+          echo "- "$(emcc -v 2>&1 | head -1) >> release.txt
+          echo "" >> release.txt
+          echo "File SHA256:" >> release.txt
+          echo \`\`\` >> release.txt
+          for x in $(ls libhdf5-*-wasm.tar.gz)
+          do
+              shasum -a 256 $x >> release.txt
+          done
+          echo \`\`\` >> release.txt
+          cat release.txt
+
+      - name: Publish tarballs
+        uses: softprops/action-gh-release@v1
+        with:
+          files: libhdf5-*-wasm.tar.gz
+          name: ${{ env.TITLE }}
+          body_path: release.txt 
