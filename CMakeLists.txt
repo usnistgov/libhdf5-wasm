@@ -19,7 +19,7 @@ FetchContent_Populate(hdf5)
 # set the project name
 project(libhdf5-wasm-build)
 
-option(BUILD_SHARED_LIBS "Build shared libs" OFF)
+option(BUILD_SHARED_LIBS "Build shared libs" ON)
 option(HDF5_BUILD_EXAMPLES "Build Examples" OFF)
 option(HDF5_BUILD_TOOLS "Build Tools" OFF)
 option(HDF5_BUILD_UTILS "Build Utils" OFF)
