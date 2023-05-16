@@ -11,9 +11,9 @@
 * activate emscripten (`emcc` and `emcmake`)
 * alter `CMakeLists.txt` with whatever flags and options you want
 * run `make all` to build all supported versions of hdf5, currently:
-  * 1.10.8
-  * 1.12.1
-  * 1.13.0
+  * 1.10.10
+  * 1.12.2
+  * 1.14.1
 * run `make release` to create gzipped tarballs of all versions e.g. libhdf5-1_12_1-wasm.tar.gz
 # Using prebuilt artifacts
 Prebuilt WASM libraries are attached to the releases of this repository.  In e.g. libhdf5-1_12_1-wasm.tar.gz you will find (among other things): 
@@ -41,8 +41,8 @@ project(libhdf5-test
 
 FetchContent_Declare(
   libhdf5-wasm
-  URL https://github.com/usnistgov/libhdf5-wasm/releases/download/v0.1.1/libhdf5-1_12_1-wasm.tar.gz
-  URL_HASH SHA256=e9bb11d89c4f26fa79b9cf1dab6159640c7b184ebf00dc97b098cd4f6de49bfe
+  URL https://github.com/usnistgov/libhdf5-wasm/releases/download/v0.3.0_3.1.28/libhdf5-1_12_2-wasm.tar.gz
+  URL_HASH SHA256=aa105188863b72b0f003b5cd524745ec8422665cdbe01bfe16f1178025f558a4
 )
 FetchContent_MakeAvailable(libhdf5-wasm)
 
