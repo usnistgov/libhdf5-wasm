@@ -1,5 +1,5 @@
 WASM_BUILD_DIR = wasm_build
-HDF5_VERSIONS = 1_12_1 1_13_0 1_10_8
+HDF5_VERSIONS = 1_12_2 1_14_1 1_10_10
 INSTALL_PATHS = $(patsubst %, $(WASM_BUILD_DIR)/%/hdf5, $(HDF5_VERSIONS))
 TARBALLS = $(patsubst %, libhdf5-%-wasm.tar.gz, $(HDF5_VERSIONS))
 
@@ -22,4 +22,4 @@ shasum: $(TARBALLS)
 
 clean:
 	rm -rf $(WASM_BUILD_DIR);
-	rm $(TARBALLS);
+	rm -f $(TARBALLS);
