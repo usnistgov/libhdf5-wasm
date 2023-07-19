@@ -8,7 +8,7 @@ name: Build HDF5 Wasm
 jobs:
   build-wasm:
     runs-on: ubuntu-latest
-    container: ghcr.io/ltla/emcmake-docker/builder:2022-12-13
+    container: ghcr.io/ltla/emcmake-docker/builder:2023-07-17
     
     steps:
       - name: Checkout
