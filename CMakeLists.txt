@@ -4,6 +4,8 @@ include(FetchContent)
 # pre-cache the linker flags
 set(CMAKE_EXE_LINKER_FLAGS_INIT "-sNODERAWFS=1 -sFORCE_FILESYSTEM=1" CACHE INTERNAL "")
 set(HDF5_VERSION "1_12_2" CACHE STRING "HDF5 version to build")
+set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/hdf5" CACHE STRING "local install folder" FORCE)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "use -fPIC for all libs" FORCE)
 
 set(SRC_HASH_1_12_2 1ca14cadff7bc4b61826eee591da1a330f44c107db66c9510ee95df3b2bc5f78)
 set(SRC_HASH_1_14_2 83eaee3f9d1790bb4b29368bf1a648ece763097a4122c80a81076e8fb1e890e6)
@@ -18,7 +20,6 @@ FetchContent_Populate(hdf5)
 
 FetchContent_Declare(
   zlib
-  # URL http://www.zlib.net/zlib-1.3.tar.gz
   URL http://zlib.net/fossils/zlib-1.3.tar.gz
   URL_HASH  SHA256=ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
   OVERRIDE_FIND_PACKAGE
@@ -58,14 +59,10 @@ option(HDF5_ENABLE_Z_LIB_SUPPORT "Enable ZLIB" ON)
 option(HDF5_ENABLE_SZIP_SUPPORT "Enable SZIP" ON)
 option(SZIP_USE_EXTERNAL "needs to be off" OFF)
 
-# option(HDF5_ALLOW_EXTERNAL_SUPPORT "use TGZ" "TGZ")
-# option(SZIP_GIT_URL "where to get szip" "https://gitlab.dkrz.de/k202009/libaec")
-
 set (BUILD_TESTING OFF CACHE BOOL "Do not build tests by default" FORCE)
 set(H5_HAVE_GETPWUID OFF)
 set(H5_HAVE_SIGNAL OFF)
 
 set(CMAKE_BUILD_TYPE RELEASE)
-set(CMAKE_INSTALL_PREFIX hdf5)
 
 add_subdirectory(${hdf5_SOURCE_DIR} ${hdf5_BINARY_DIR})
