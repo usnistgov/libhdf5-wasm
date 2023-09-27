@@ -34,7 +34,7 @@ FetchContent_Declare(
 FetchContent_Populate(zlib)
 
 # add global included path because zlib not set up to be subproject
-include_directories(${zlib_SOURCE_DIR})
+include_directories(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 
 set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR})
