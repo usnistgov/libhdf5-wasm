@@ -31,11 +31,8 @@ jobs:
           emsdk install ${{ env.EMSDK_VERSION }}
           emsdk activate ${{ env.EMSDK_VERSION }}
 
-      - name: Build library
+      - name: Build library packages
         run: make all
-
-      - name: Package builds
-        run: make release
 
       - name: Prettify release body
         run: |
@@ -45,7 +42,7 @@ jobs:
           echo "" >> release.txt
           echo "File SHA256:" >> release.txt
           echo \`\`\` >> release.txt
-          for x in $(ls libhdf5-*-wasm.tar.gz)
+          for x in $(ls HDF5-*-Emscripten.tar.gz)
           do
               shasum -a 256 $x >> release.txt
           done
@@ -55,6 +52,6 @@ jobs:
       - name: Publish tarballs
         uses: softprops/action-gh-release@v1
         with:
-          files: libhdf5-*-wasm.tar.gz
+          files: HDF5-*-Emscripten.tar.gz
           name: ${{ env.TITLE }}
           body_path: release.txt 
