@@ -52,6 +52,6 @@ jobs:
       - name: Publish tarballs
         uses: softprops/action-gh-release@v1
         with:
-          files: *-Emscripten.tar.gz
+          files: "*-Emscripten.tar.gz"
           name: ${{ env.TITLE }}
           body_path: release.txt 
