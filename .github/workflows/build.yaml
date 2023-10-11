@@ -42,7 +42,7 @@ jobs:
           echo "" >> release.txt
           echo "File SHA256:" >> release.txt
           echo \`\`\` >> release.txt
-          for x in $(ls HDF5-*-Emscripten.tar.gz)
+          for x in $(ls *-Emscripten.tar.gz)
           do
               shasum -a 256 $x >> release.txt
           done
@@ -52,6 +52,6 @@ jobs:
       - name: Publish tarballs
         uses: softprops/action-gh-release@v1
         with:
-          files: HDF5-*-Emscripten.tar.gz
+          files: *-Emscripten.tar.gz
           name: ${{ env.TITLE }}
           body_path: release.txt 
