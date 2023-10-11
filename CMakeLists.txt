@@ -26,34 +26,37 @@ FetchContent_Declare(
 )
 FetchContent_Populate(hdf5)
 
-FetchContent_Declare(
-  zlib
-  URL http://zlib.net/fossils/zlib-1.3.tar.gz
-  URL_HASH  SHA256=ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
-  OVERRIDE_FIND_PACKAGE
-)
-FetchContent_Populate(zlib)
+# FetchContent_Declare(
+#   zlib
+#   URL http://zlib.net/fossils/zlib-1.3.tar.gz
+#   URL_HASH  SHA256=ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
+#   OVERRIDE_FIND_PACKAGE
+# )
+# FetchContent_Populate(zlib)
 
-# add global included path because zlib not set up to be subproject
-include_directories(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+# # add global included path because zlib not set up to be subproject
+# include_directories(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+# add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 
-set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR})
-set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libz.a)
+set (ZLIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libz)
+set(ZLIB_INCLUDE_DIR ${ZLIB_DIR}/include)
+set(ZLIB_LIBRARY ${ZLIB_DIR}/lib/libz.a)
 
-FetchContent_Declare(
-  libaec
-  GIT_REPOSITORY https://gitlab.dkrz.de/k202009/libaec
-  GIT_TAG v1.0.6
-  OVERRIDE_FIND_PACKAGE
-)
-set(libaec_USE_STATIC_LIBS ON)
-FetchContent_MakeAvailable(libaec)
+# FetchContent_Declare(
+#   libaec
+#   GIT_REPOSITORY https://gitlab.dkrz.de/k202009/libaec
+#   GIT_TAG v1.0.6
+#   OVERRIDE_FIND_PACKAGE
+# )
+# set(libaec_USE_STATIC_LIBS ON)
+# FetchContent_MakeAvailable(libaec)
 
 set (USE_LIBAEC ON CACHE BOOL "Use libaec szip replacement" FORCE)
-set(SZIP_INCLUDE_DIR ${libaec_SOURCE_DIR}/include)
-set(SZIP_LIBRARY ${libaec_BINARY_DIR}/src/libsz.a)
-set(SZIP_DIR ${libaec_BINARY_DIR}/src)
+set (SZIP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libaec)
+set (SZIP_INCLUDE_DIR ${SZIP_DIR}/include)
+set (SZIP_LIBRARY ${SZIP_DIR}/lib/libsz.a)
+set (libaec_INCLUDE_DIR ${SZIP_DIR}/include)
+set (libaec_LIBRARY ${SZIP_DIR}/lib/libaec.a)
 
 # set the project name
 project(libhdf5-wasm-build)
@@ -75,8 +78,8 @@ option(HDF5_BUILD_UTILS "Build Utils" OFF)
 option(HDF5_BUILD_CPP_LIB "Build CPP libraries" ON)
 option(HDF5_ENABLE_Z_LIB_SUPPORT "Enable ZLIB" ON)
 option(HDF5_ENABLE_SZIP_SUPPORT "Enable SZIP" ON)
-# option(SZIP_USE_EXTERNAL "needs to be off" 0)
-# option(ZLIB_USE_EXTERNAL "needs to be off" 0)
+option(SZIP_USE_EXTERNAL "needs to be off" 0)
+option(ZLIB_USE_EXTERNAL "needs to be off" 0)
 
 set (BUILD_TESTING OFF CACHE BOOL "Do not build tests by default" FORCE)
 set(H5_HAVE_GETPWUID OFF)
