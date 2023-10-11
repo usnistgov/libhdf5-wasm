@@ -7,27 +7,21 @@ HDF5_TARBALLS = $(patsubst %, HDF5-%-Emscripten.tar.gz, $(HDF5_VERSIONS))
 
 all: $(HDF5_TARBALLS) szip_tarball libz_tarball
 
-libaec: 
+libaec-1.0.6-Emscripten.tar.gz:
 	emcmake cmake -S $(SZIP_SRC_DIR) -B $(BUILD_DIR)/libaec;
 	cmake --build $(BUILD_DIR)/libaec;
-	cmake --install $(BUILD_DIR)/libaec --prefix=libaec;
-
-libaec-1.0.6-Emscripten.tar.gz: libaec
 	cpack -G TGZ --config $(BUILD_DIR)/libaec/CPackConfig.cmake;
 
 szip_tarball: libaec-1.0.6-Emscripten.tar.gz
 
-libz: 
+libz-1.3-Emscripten.tar.gz:
 	emcmake cmake -S $(ZLIB_SRC_DIR) -B $(BUILD_DIR)/libz;
 	cmake --build $(BUILD_DIR)/libz;
-	cmake --install $(BUILD_DIR)/libz --prefix=libz;
-
-LIBZ-1.3-Emscripten.tar.gz: libz
 	cpack -G TGZ --config $(BUILD_DIR)/libz/CPackConfig.cmake;
 
-libz_tarball: LIBZ-1.3-Emscripten.tar.gz
+libz_tarball: libz-1.3-Emscripten.tar.gz
 
-HDF5-%-Emscripten.tar.gz: libaec libz
+HDF5-%-Emscripten.tar.gz: szip_tarball libz_tarball
 	emcmake cmake -DHDF5_VERSION=$(*) -S . -B $(BUILD_DIR)/$(*);
 	cmake --build $(BUILD_DIR)/$(*) -j8;
 	cpack -G TGZ --config $(BUILD_DIR)/$(*)/CPackConfig.cmake;
