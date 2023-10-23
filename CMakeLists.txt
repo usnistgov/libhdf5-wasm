@@ -23,7 +23,9 @@ FetchContent_Declare(
   URL https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${hdf5_source_version}.tar.gz
   URL_HASH SHA256=${SRC_HASH_${HDF5_VERSION}}
 )
-FetchContent_Populate(hdf5)
+if (NOT hdf5_POPULATED)
+  FetchContent_Populate(hdf5)
+endif()
 
 FetchContent_Declare(
   zlib
@@ -44,18 +46,19 @@ FetchContent_Declare(
   libaec
   GIT_REPOSITORY https://gitlab.dkrz.de/k202009/libaec
   GIT_TAG v1.0.6
-  OVERRIDE_FIND_PACKAGE
 )
 set(libaec_USE_STATIC_LIBS ON)
 FetchContent_MakeAvailable(libaec)
 
 set (USE_LIBAEC ON CACHE BOOL "Use libaec szip replacement" FORCE)
-set (SZIP_DIR ${libaec_SOURCE_DIR})
-set (SZIP_INCLUDE_DIR ${SZIP_DIR}/include)
+set (USE_LIBAEC_STATIC ON CACHE BOOL "Use libaec szip replacement" FORCE)
+set (SZIP_INCLUDE_DIR ${libaec_SOURCE_DIR}/include)
 set (SZIP_LIBRARY ${libaec_BINARY_DIR}/src/libsz.a)
-set (libaec_DIR ${SZIP_DIR}/cmake)
-# set (libaec_INCLUDE_DIR ${SZIP_DIR}/include)
-# set (libaec_LIBRARY ${SZIP_DIR}/lib/libaec.a)
+set (libaec_DIR ${libaec_BINARY_DIR}/cmake)
+set (libaec_ROOT ${libaec_BINARY_DIR})
+# find_package(libaec 1.0.5 REQUIRED CONFIG)
+set (libaec_INCLUDE_DIR ${libaec_SOURCE_DIR}/include)
+set (libaec_LIBRARY ${libaec_BINARY_DIR}/libaec.a)
 
 # set the project name
 project(libhdf5-wasm-build)
