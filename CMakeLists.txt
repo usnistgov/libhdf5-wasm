@@ -4,7 +4,6 @@ include(FetchContent)
 # pre-cache the linker flags
 set(CMAKE_EXE_LINKER_FLAGS_INIT "-sNODERAWFS=1 -sFORCE_FILESYSTEM=1 -sSINGLE_FILE=1 --extern-pre-js=${CMAKE_SOURCE_DIR}/shebang.txt" CACHE INTERNAL "")
 set(HDF5_VERSION "1.12.2" CACHE STRING "HDF5 version to build")
-set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/hdf5" CACHE STRING "local install folder" FORCE)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "use -fPIC for all libs" FORCE)
 set(CMAKE_EXECUTABLE_SUFFIX_C "" CACHE STRING "" FORCE)
 
@@ -28,21 +27,24 @@ FetchContent_Populate(hdf5)
 
 FetchContent_Declare(
   zlib
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/libz-1.3-Emscripten.tar.gz
-  # URL_HASH  SHA256=ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
-  # OVERRIDE_FIND_PACKAGE
+  URL http://zlib.net/fossils/zlib-1.3.tar.gz
+  URL_HASH  SHA256=ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
+  OVERRIDE_FIND_PACKAGE
 )
 FetchContent_Populate(zlib)
 
 # add global included path because zlib not set up to be subproject
 include_directories(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-FetchContent_MakeAvailable(zlib)
+add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
+# FetchContent_MakeAvailable(zlib)
 set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR}/include)
-set(ZLIB_LIBRARY ${zlib_SOURCE_DIR}/lib/libz.a)
+set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libz.a)
 
 FetchContent_Declare(
   libaec
-  URL ${CMAKE_CURRENT_SOURCE_DIR}/libaec-1.0.6-Emscripten.tar.gz
+  GIT_REPOSITORY https://gitlab.dkrz.de/k202009/libaec
+  GIT_TAG v1.0.6
+  OVERRIDE_FIND_PACKAGE
 )
 set(libaec_USE_STATIC_LIBS ON)
 FetchContent_MakeAvailable(libaec)
@@ -50,7 +52,8 @@ FetchContent_MakeAvailable(libaec)
 set (USE_LIBAEC ON CACHE BOOL "Use libaec szip replacement" FORCE)
 set (SZIP_DIR ${libaec_SOURCE_DIR})
 set (SZIP_INCLUDE_DIR ${SZIP_DIR}/include)
-set (SZIP_LIBRARY ${SZIP_DIR}/lib/libsz.a)
+set (SZIP_LIBRARY ${libaec_BINARY_DIR}/src/libsz.a)
+set (libaec_DIR ${SZIP_DIR}/cmake)
 # set (libaec_INCLUDE_DIR ${SZIP_DIR}/include)
 # set (libaec_LIBRARY ${SZIP_DIR}/lib/libaec.a)
 
