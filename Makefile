@@ -7,7 +7,7 @@ all: $(HDF5_TARBALLS)
 
 HDF5-%-Emscripten.tar.gz:
 	emcmake cmake -DCMAKE_INSTALL_PREFIX="$(INSTALL_PREFIX)/$(*)" -DHDF5_VERSION=$(*) -S . -B $(BUILD_DIR)/$(*);
-	cmake --build $(BUILD_DIR)/$(*) --target zlib;
+	cmake --build $(BUILD_DIR)/$(*) --target zlibstatic;
 	cmake --build $(BUILD_DIR)/$(*) -j8;
 	cmake --install $(BUILD_DIR)/$(*);
 	sed -i -- 's/;[^;]*libz\.a/;$${_IMPORT_PREFIX}\/lib\/libz.a/g' $(INSTALL_PREFIX)/$(*)/cmake/hdf5-targets.cmake;
