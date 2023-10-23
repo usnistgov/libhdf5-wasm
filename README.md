@@ -19,7 +19,7 @@ Support for GZIP and SZIP compression (through libz and libsz) are included.
   * 1.14.2
 * this will create gzipped tarballs of all chosen versions e.g. HDF5-1.12.2-Emscripten.tar.gz
 # Using prebuilt artifacts
-Prebuilt CMake TGZ packages are attached to the releases of this repository.  In e.g. HDF5-1.12.1-Emscripten.tar.gz you will find a directory structure like this: `HDF5-1.12.2-Emscripten/HDF_Group/HDF5/1.12.2/` in which are: 
+Prebuilt CMake TGZ packages are attached to the releases of this repository.  In e.g. HDF5-1.12.1-Emscripten.tar.gz you will find:
  * `share/COPYING` license for HDF5
  * the `include` folder for building against these libraries
  * `lib/libhdf5.a`
@@ -62,7 +62,7 @@ FetchContent_Declare(
   # URL_HASH SHA256=7089f9bf29dc3759d7aa77848cfa12d546eabd152d40dd00a90aace99c056600
 )
 FetchContent_MakeAvailable(libhdf5-wasm)
-set(HDF5_DIR ${libhdf5-wasm_SOURCE_DIR}/HDF_Group/HDF5/1.12.2/cmake)
+set(HDF5_DIR ${libhdf5-wasm_SOURCE_DIR}/cmake)
 find_package(HDF5 REQUIRED CONFIG)
 
 # build a project using only C headers (libhdf5.a, libhdf5_hl.a):
