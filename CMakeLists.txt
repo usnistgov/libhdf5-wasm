@@ -8,7 +8,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "use -fPIC for all libs" FORCE
 set(CMAKE_EXECUTABLE_SUFFIX_C "" CACHE STRING "" FORCE)
 
 set(SRC_HASH_1_12_3 39e2e3e25f2263f2dc3370556c174952675d7ac51c4d6f7d4f5e8b3a8bd10ac6)
-set(SRC_HASH_1.14.5 8a639f829d2b1e39a206ff4cbaeb9047d88541a7ca5a8b65b7af52b667846d0d)
+set(SRC_HASH_1.14.5 ec2e13c52e60f9a01491bb3158cb3778c985697131fc6a342262d32a26e58e44)
+set(SRC_HASH_1.14.6 6df53f84376d87e96eeb255703e3b1a348fc08a48e06e37053f1bfb379970189)
 set(SRC_HASH_1_10_11 4ef6375fc7d8c54dcd66e9bc35a7a3580d33cd8878bdf21ad1eb388a43863159)
 
 if( NOT DEFINED SRC_HASH_${HDF5_VERSION})
@@ -17,11 +18,30 @@ endif()
 
 message(STATUS "Building version ${HDF5_VERSION}...")
 
+# Collect all patch files
+file(GLOB PATCH_FILES LIST_DIRECTORIES false
+    "${CMAKE_CURRENT_SOURCE_DIR}/patches/${HDF5_VERSION}/*.patch"
+)
+
+message(STATUS "Patches found: ${PATCH_FILES}")
+# Create patch command if patches exist
+set (patch_files_command)
+if(PATCH_FILES)
+    foreach(patch_file ${PATCH_FILES})
+        list(APPEND patch_files_command
+           COMMAND git apply --ignore-whitespace "${patch_file}"
+        )
+    endforeach()
+endif()
+
 FetchContent_Declare(
   hdf5
-  URL https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}.tar.gz
-  URL_HASH SHA256=${SRC_HASH_${HDF5_VERSION}}
+  GIT_REPOSITORY https://github.com/HDFGroup/hdf5.git
+  GIT_TAG hdf5-${HDF5_VERSION}
+  PATCH_COMMAND ${patch_files_command}
+  UPDATE_DISCONNECTED 1
 )
+FetchContent_GetProperties(hdf5)
 if (NOT hdf5_POPULATED)
   FetchContent_Populate(hdf5)
 endif()
@@ -38,7 +58,7 @@ FetchContent_Populate(zlib)
 include_directories(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 # FetchContent_MakeAvailable(zlib)
-set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR}/include)
+set(ZLIB_INCLUDE_DIR ${zlib_SOURCE_DIR})
 set(ZLIB_LIBRARY ${zlib_BINARY_DIR}/libz.a)
 
 FetchContent_Declare(
@@ -74,7 +94,7 @@ project(libhdf5-wasm-build)
 set (BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 option(BUILD_SHARED_LIBS "Build shared libs" OFF)
 option(HDF5_BUILD_EXAMPLES "Build Examples" OFF)
-option(HDF5_BUILD_TOOLS "Build Tools" ON)
+option(HDF5_BUILD_TOOLS "Build Tools" OFF)
 option(HDF5_BUILD_UTILS "Build Utils" OFF)
 option(HDF5_BUILD_CPP_LIB "Build CPP libraries" ON)
 option(HDF5_ENABLE_Z_LIB_SUPPORT "Enable ZLIB" ON)
@@ -83,9 +103,11 @@ option(SZIP_USE_EXTERNAL "needs to be off" 0)
 option(ZLIB_USE_EXTERNAL "needs to be off" 0)
 
 set (BUILD_TESTING OFF CACHE BOOL "Do not build tests by default" FORCE)
+set(HDF5_EXTERNALLY_CONFIGURED 1)
 set(H5_HAVE_GETPWUID OFF)
 set(H5_HAVE_SIGNAL OFF)
 
 set(CMAKE_BUILD_TYPE RELEASE)
 
 add_subdirectory(${hdf5_SOURCE_DIR} ${hdf5_BINARY_DIR})
+install(EXPORT hdf5-targets DESTINATION cmake)
