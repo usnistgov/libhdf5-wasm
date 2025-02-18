@@ -111,3 +111,8 @@ set(CMAKE_BUILD_TYPE RELEASE)
 
 add_subdirectory(${hdf5_SOURCE_DIR} ${hdf5_BINARY_DIR})
 install(EXPORT hdf5-targets DESTINATION cmake)
+install (
+    FILES ${hdf5_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/hdf5-config.cmake
+    DESTINATION cmake
+    COMPONENT configinstall
+)
