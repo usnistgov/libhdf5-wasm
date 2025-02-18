@@ -12,6 +12,8 @@ HDF5-%-Emscripten.tar.gz:
 	cmake --build $(BUILD_DIR)/$(*) -j8;
 	cmake --install $(BUILD_DIR)/$(*);
 	sed -i -- 's/;[^;]*ZLIB::ZLIB>/;$${_IMPORT_PREFIX}\/lib\/libz.a/g' $(INSTALL_PREFIX)/$(*)/cmake/hdf5-targets.cmake;
+	sed -i -- 's/;[^;]*libaec::sz>/;$${_IMPORT_PREFIX}\/lib\/libsz.a/g' $(INSTALL_PREFIX)/$(*)/cmake/hdf5-targets.cmake;
+	sed -i -- 's/;[^;]*libaec::aec>//g' $(INSTALL_PREFIX)/$(*)/cmake/hdf5-targets.cmake;
 	sed -i -- 's/;[^;]*libz\.a/;$${_IMPORT_PREFIX}\/lib\/libz.a/g' $(INSTALL_PREFIX)/$(*)/cmake/hdf5-targets.cmake;
 	sed -i -- 's/;[^;]*libsz\.a/;$${_IMPORT_PREFIX}\/lib\/libsz.a/g' $(INSTALL_PREFIX)/$(*)/cmake/hdf5-targets.cmake;
 	cp CMakeLists_dist.txt $(INSTALL_PREFIX)/CMakeLists.txt;
