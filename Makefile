@@ -1,6 +1,6 @@
 INSTALL_PREFIX = $(realpath .)/dist
 BUILD_DIR = build
-HDF5_VERSIONS = 1.12.2 1.14.2 1.10.10
+HDF5_VERSIONS = 1_12_3 1.14.5 1_10_11
 HDF5_TARBALLS = $(patsubst %, HDF5-%-Emscripten.tar.gz, $(HDF5_VERSIONS))
 
 all: $(HDF5_TARBALLS)

@@ -3,24 +3,23 @@ include(FetchContent)
 
 # pre-cache the linker flags
 set(CMAKE_EXE_LINKER_FLAGS_INIT "-sNODERAWFS=1 -sFORCE_FILESYSTEM=1 -sSINGLE_FILE=1 --extern-pre-js=${CMAKE_SOURCE_DIR}/shebang.txt" CACHE INTERNAL "")
-set(HDF5_VERSION "1.12.2" CACHE STRING "HDF5 version to build")
+set(HDF5_VERSION "1_12_3" CACHE STRING "HDF5 version to build")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON CACHE BOOL "use -fPIC for all libs" FORCE)
 set(CMAKE_EXECUTABLE_SUFFIX_C "" CACHE STRING "" FORCE)
 
-set(SRC_HASH_1.12.2 1ca14cadff7bc4b61826eee591da1a330f44c107db66c9510ee95df3b2bc5f78)
-set(SRC_HASH_1.14.2 83eaee3f9d1790bb4b29368bf1a648ece763097a4122c80a81076e8fb1e890e6)
-set(SRC_HASH_1.10.10 563940efec30ec027108bc425f45488ce98d356798bdf743441e574c2d52dd54)
+set(SRC_HASH_1_12_3 39e2e3e25f2263f2dc3370556c174952675d7ac51c4d6f7d4f5e8b3a8bd10ac6)
+set(SRC_HASH_1.14.5 8a639f829d2b1e39a206ff4cbaeb9047d88541a7ca5a8b65b7af52b667846d0d)
+set(SRC_HASH_1_10_11 4ef6375fc7d8c54dcd66e9bc35a7a3580d33cd8878bdf21ad1eb388a43863159)
 
 if( NOT DEFINED SRC_HASH_${HDF5_VERSION})
   message( FATAL_ERROR "Version ${HDF5_VERSION} is not supported.  See CMakeLists.txt for valid versions" )
 endif()
 
-string(REPLACE "." "_" hdf5_source_version ${HDF5_VERSION})
 message(STATUS "Building version ${HDF5_VERSION}...")
 
 FetchContent_Declare(
   hdf5
-  URL https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${hdf5_source_version}.tar.gz
+  URL https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}.tar.gz
   URL_HASH SHA256=${SRC_HASH_${HDF5_VERSION}}
 )
 if (NOT hdf5_POPULATED)
