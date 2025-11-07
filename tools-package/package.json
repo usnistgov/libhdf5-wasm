@@ -1,0 +1,35 @@
+{
+  "name": "hdf5-wasm-tools",
+  "version": "0.1.0",
+  "description": "Tools from the HDF5 library compiled to WebAssembly",
+  "homepage": "https://github.com/usnistgov/libhdf5-wasm/tree/main/tools-package",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/usnistgov/libhdf5-wasm.git"
+  },
+  "bin": {
+    "h5clear": "./bin/h5clear",
+    "h5copy": "./bin/h5copy",
+    "h5debug": "./bin/h5debug",
+    "h5delete": "./bin/h5delete",
+    "h5diff": "./bin/h5diff",
+    "h5dump": "./bin/h5dump",
+    "h5format_convert": "./bin/h5format_convert",
+    "h5import": "./bin/h5import",
+    "h5jam": "./bin/h5jam",
+    "h5ls": "./bin/h5ls",
+    "h5mkgrp": "./bin/h5mkgrp",
+    "h5perf_serial": "./bin/h5perf_serial",
+    "h5repack": "./bin/h5repack",
+    "h5repart": "./bin/h5repart",
+    "h5stat": "./bin/h5stat",
+    "h5unjam": "./bin/h5unjam",
+    "h5watch": "./bin/h5watch"
+  },
+  "files": [
+    "bin/",
+    "LICENSE.txt"
+  ],
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE.txt"
+}
