@@ -88,7 +88,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            "*-Emscripten.tar.gz"
-            "hdf5-wasm-tools-*.tgz"
+            *-Emscripten.tar.gz
+            hdf5-wasm-tools-*.tgz
           name: ${{ env.TITLE }}
           body_path: release.txt 
