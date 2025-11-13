@@ -3,6 +3,17 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      emsdk_version:
+        description: 'Emscripten SDK version (e.g., 3.1.50)'
+        required: true
+        type: string
+        default: '3.1.68'
+      title:
+        description: 'Release title (e.g., v0.7.3 (Emscripten 3.1.50))'
+        required: true
+        type: string
+        default: 'testing'
 
 name: Build HDF5 Wasm
 
@@ -17,14 +28,22 @@ jobs:
 
       - name: Fetch release name
         run: |
-          release=${GITHUB_REF#refs/*/}
-          echo "RELEASE=${release}" >> $GITHUB_ENV
-          emsdk=$(echo ${release} | sed "s/^v[^_]*_//") 
-          echo "EMSDK_VERSION=${emsdk}" >> $GITHUB_ENV
-          prefix=$(echo ${release} | sed "s/_.*//") 
-          title="${prefix} (Emscripten ${emsdk})"
-          echo "TITLE=${title}" >> $GITHUB_ENV
-          echo $title
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Use workflow inputs for manual triggers
+            echo "EMSDK_VERSION=${{ inputs.emsdk_version }}" >> $GITHUB_ENV
+            echo "TITLE=${{ inputs.title }}" >> $GITHUB_ENV
+            echo "Using workflow inputs: ${{ inputs.title }}"
+          else
+            # Parse from tag for release triggers
+            release=${GITHUB_REF#refs/*/}
+            echo "RELEASE=${release}" >> $GITHUB_ENV
+            emsdk=$(echo ${release} | sed "s/^v[^_]*_//") 
+            echo "EMSDK_VERSION=${emsdk}" >> $GITHUB_ENV
+            prefix=$(echo ${release} | sed "s/_.*//") 
+            title="${prefix} (Emscripten ${emsdk})"
+            echo "TITLE=${title}" >> $GITHUB_ENV
+            echo $title
+          fi
 
       - name: Activate Emscripten version
         run: |
