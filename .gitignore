@@ -1,3 +1,8 @@
 .DS_Store
 libhdf5-*-wasm.tar*
-wasm_build/**
+HDF5*.tar.gz
+build/**
+dist/**
+tools/*
+tools-package/bin/*
+tools-package/*.tgz
