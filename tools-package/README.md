@@ -37,7 +37,7 @@ npx h5repack -f GZIP -l 5 input.h5 output.h5
 
 **Built-in Support**: GZIP and SZIP compression filters are compiled in and available by default.
 
-**Additional Filters**: To enable support for additional compression filters (such as LZF, Blosc, etc.), install the companion package:
+**Additional Filters**: To enable support for additional compression filters (such as LZF, Blosc, etc.), install the companion package [h5wasm-plugins](https://www.npmjs.com/package/h5wasm-plugins) :
 
 ```bash
 npm install h5wasm-plugins
