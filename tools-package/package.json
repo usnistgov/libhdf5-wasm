@@ -28,7 +28,8 @@
   },
   "files": [
     "bin/",
-    "LICENSE.txt"
+    "LICENSE.txt",
+    "README.md"
   ],
   "author": "",
   "license": "SEE LICENSE IN LICENSE.txt"
