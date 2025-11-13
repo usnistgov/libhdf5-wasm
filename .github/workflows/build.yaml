@@ -2,13 +2,14 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 name: Build HDF5 Wasm
 
 jobs:
   build-wasm:
     runs-on: ubuntu-latest
-    container: ghcr.io/ltla/emcmake-docker/builder:2023-07-17
+    container: ghcr.io/kanaverse/emcmake-docker/builder:2024-10-01
     
     steps:
       - name: Checkout
@@ -50,7 +51,8 @@ jobs:
           cat release.txt
 
       - name: Publish tarballs
-        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
         with:
           files: "*-Emscripten.tar.gz"
           name: ${{ env.TITLE }}
