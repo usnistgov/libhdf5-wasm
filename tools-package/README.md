@@ -5,7 +5,7 @@ This package provides command-line tools for working with HDF5 files, compiled t
 These are redistributions of tools originally provided by [The HDF Group](https://www.hdfgroup.org/) 
 as part of the [HDF5 library](https://github.com/HDFGroup/hdf5), compiled to WASM for use in JavaScript environments.
 
-This package is part of the larger [libhdf5-wasm](https://github.com/kanaverse/libhdf5-wasm) project which provides WASM-compiled HDF5 libraries for re-use in other projects
+This package is part of the larger [libhdf5-wasm](https://github.com/usnistgov/libhdf5-wasm) project which provides WASM-compiled HDF5 libraries for re-use in other projects
 
 These tools have **no system dependencies**:
 - statically linked to a WASM-compiled version of the HDF5 library
