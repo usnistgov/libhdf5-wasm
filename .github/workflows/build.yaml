@@ -54,6 +54,11 @@ jobs:
       - name: Build library packages
         run: make all
 
+      - name: Build tools
+        run: |
+          make tools
+          npm pack tools-package/
+
       - name: Prettify release body
         run: |
           echo "Built with:" > release.txt
@@ -66,6 +71,10 @@ jobs:
           do
               shasum -a 256 $x >> release.txt
           done
+          for x in $(ls hdf5-wasm-tools-*.tgz)
+          do
+              shasum -a 256 $x >> release.txt
+          done
           echo \`\`\` >> release.txt
           cat release.txt
 
@@ -73,6 +82,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: "*-Emscripten.tar.gz"
+          files: |
+            "*-Emscripten.tar.gz"
+            "hdf5-wasm-tools-*.tgz"
           name: ${{ env.TITLE }}
           body_path: release.txt 
