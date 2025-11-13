@@ -24,7 +24,7 @@ jobs:
     
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - name: Fetch release name
         run: |
@@ -53,6 +53,11 @@ jobs:
 
       - name: Build library packages
         run: make all
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Build tools
         run: |
