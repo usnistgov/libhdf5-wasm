@@ -55,6 +55,10 @@ set(HDF5_BUILD_EXAMPLES OFF CACHE BOOL "Build HDF5 Library Examples" FORCE)
 set(HDF5_BUILD_UTILS OFF CACHE BOOL "Build HDF5 Utils" FORCE)
 
 # Enable compression support
+# Note: HDF5 v2.0.0+ uses HDF5_ENABLE_ZLIB_SUPPORT (without underscore)
+# Earlier versions use HDF5_ENABLE_Z_LIB_SUPPORT (with underscore)
+# Set both for compatibility across versions
+set(HDF5_ENABLE_ZLIB_SUPPORT ON CACHE BOOL "Enable Zlib Filters" FORCE)
 set(HDF5_ENABLE_Z_LIB_SUPPORT ON CACHE BOOL "Enable ZLIB support" FORCE)
 set(HDF5_ENABLE_SZIP_SUPPORT ON CACHE BOOL "Enable SZIP support" FORCE)
 set(HDF5_ENABLE_SZIP_ENCODING ON CACHE BOOL "Enable SZIP encoding" FORCE)
