@@ -51,6 +51,11 @@ jobs:
           emsdk install ${{ env.EMSDK_VERSION }}
           emsdk activate ${{ env.EMSDK_VERSION }}
 
+      - name: Install libatomic for wasm-opt
+        run: |
+          apt-get update
+          apt-get install -y libatomic1
+
       - name: Build library packages
         run: make all
 
