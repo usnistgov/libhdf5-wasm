@@ -18,6 +18,8 @@ Support for GZIP and SZIP compression (through libz and libsz) are included.
   * 1.12.2
   * 1.14.2
 * this will create gzipped tarballs of all chosen versions e.g. HDF5-1.12.2-Emscripten.tar.gz
+* `make wasm64` builds a wasm64 (Memory64) variant of the default version, e.g. HDF5-2.0.0-wasm64-Emscripten.tar.gz;
+  code using it must also compile and link with `-sMEMORY64=1`
 # Using prebuilt artifacts
 Prebuilt CMake TGZ packages are attached to the releases of this repository.  In e.g. HDF5-1.12.1-Emscripten.tar.gz you will find:
  * `share/COPYING` license for HDF5

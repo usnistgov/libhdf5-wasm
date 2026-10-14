@@ -1,0 +1,11 @@
+--- a/src/H5private.h
++++ b/src/H5private.h
+@@ -408,7 +408,7 @@
+ #define h5_posix_io_t         unsigned int
+ #define h5_posix_io_ret_t     int
+ #define H5_POSIX_MAX_IO_BYTES INT_MAX
+-#elif defined(H5_HAVE_DARWIN)
++#elif defined(H5_HAVE_DARWIN) || defined(__EMSCRIPTEN__)
+ #define h5_posix_io_t         size_t
+ #define h5_posix_io_ret_t     ssize_t
+ #define H5_POSIX_MAX_IO_BYTES INT_MAX

@@ -6,15 +6,20 @@ HDF5_VERSIONS = 1_10_11 1_12_3 1.14.6 2.0.0
 HDF5_DEFAULT_VERSION = $(lastword $(HDF5_VERSIONS))
 HDF5_TARBALLS = $(patsubst %, HDF5-%-Emscripten.tar.gz, $(HDF5_VERSIONS))
 HDF5_DEFAULT_TARBALL = HDF5-$(HDF5_DEFAULT_VERSION)-Emscripten.tar.gz
+HDF5_WASM64_TARBALL = HDF5-$(HDF5_DEFAULT_VERSION)-wasm64-Emscripten.tar.gz
+HDF5_TARBALLS += $(HDF5_WASM64_TARBALL)
+# a "-wasm64" stem builds with -sMEMORY64=1 (emcc applies EMCC_CFLAGS to every compile and link)
+WASM64_ENV = $(if $(findstring -wasm64,$*),EMCC_CFLAGS=-sMEMORY64=1)
 
-.PHONY: all default tools shasum clean help
+.PHONY: all default wasm64 tools shasum clean help
 
 all: $(HDF5_TARBALLS)
 default: $(HDF5_DEFAULT_TARBALL)
+wasm64: $(HDF5_WASM64_TARBALL)
 
 HDF5-%-Emscripten.tar.gz:
-	emcmake cmake -DCMAKE_INSTALL_PREFIX="$(INSTALL_PREFIX)/$(*)" -DHDF5_VERSION=$(*) -S . -B $(BUILD_DIR)/$(*);
-	cmake --build $(BUILD_DIR)/$(*) -j8;
+	$(WASM64_ENV) emcmake cmake -DCMAKE_INSTALL_PREFIX="$(INSTALL_PREFIX)/$(*)" -DHDF5_VERSION=$(*:-wasm64=) -S . -B $(BUILD_DIR)/$(*);
+	$(WASM64_ENV) cmake --build $(BUILD_DIR)/$(*) -j8;
 	cmake --install $(BUILD_DIR)/$(*);
 	cd $(INSTALL_PREFIX)/$(*) && tar -cvzf ../../$@ *;
 
